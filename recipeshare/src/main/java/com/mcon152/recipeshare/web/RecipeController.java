@@ -76,10 +76,24 @@ public class RecipeController {
      * @param id the ID of the recipe to update
      * @param updatedRecipe the updated recipe data
      * @return the updated recipe, or null if not found
+     *
+     * PUT = Full Update
+     * Think of PUT as “replace the entire recipe.”
      */
     @PutMapping("/{id}")
     public Recipe updateRecipe(@PathVariable long id, @RequestBody Recipe updatedRecipe) {
-        throw new UnsupportedOperationException("Update recipe not implemented");
+        // Loop through existing recipes to find the one with the matching ID
+        for (int i = 0; i < recipes.size(); i++) {
+            Recipe currentRecipe = recipes.get(i);
+            if (currentRecipe.getId() == id) {
+                // Keep the same ID
+                updatedRecipe.setId(id);
+                recipes.set(i, updatedRecipe);
+                return updatedRecipe;
+            }
+        }
+        // If no recipe found, return null
+        return null;
     }
 
     /**
@@ -88,9 +102,30 @@ public class RecipeController {
      * @param id the ID of the recipe to update
      * @param partialRecipe the partial recipe data to update
      * @return the updated recipe, or null if not found
+     *
+     * PATCH = Partial Update
+     * Think of PATCH as “only update what’s changed.”
      */
     @PatchMapping("/{id}")
     public Recipe patchRecipe(@PathVariable long id, @RequestBody Recipe partialRecipe) {
-        throw new UnsupportedOperationException("Update recipe not implemented");
+        for (Recipe currentRecipe : recipes) {
+            if (currentRecipe.getId() == id) {
+                // Update only non-null fields (skip nulls)
+                if (partialRecipe.getTitle() != null) {
+                    currentRecipe.setTitle(partialRecipe.getTitle());
+                }
+                if (partialRecipe.getDescription() != null) {
+                    currentRecipe.setDescription(partialRecipe.getDescription());
+                }
+                if (partialRecipe.getIngredients() != null) {
+                    currentRecipe.setIngredients(partialRecipe.getIngredients());
+                }
+                if (partialRecipe.getInstructions() != null) {
+                    currentRecipe.setInstructions(partialRecipe.getInstructions());
+                }
+                return currentRecipe;
+            }
+        }
+        return null;
     }
 }
