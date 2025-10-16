@@ -73,7 +73,7 @@ public class RecipeController {
     /**
      * Updates an existing recipe by its ID.
      *
-     * @param id the ID of the recipe to update
+     * @param  id the ID of the recipe to update
      * @param updatedRecipe the updated recipe data
      * @return the updated recipe, or null if not found
      *
